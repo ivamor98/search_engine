@@ -1,2 +1,0 @@
-std::vector is a sequence container that encapsulates dynamic size arrays.
-Except for the std::vector<bool> partial specialization, the elements are stored contiguously, which means that elements can be accessed not only through iterators, but also using offsets to regular pointers to elements. This means that a pointer to an element of a vector may be passed to any function that expects a pointer to an element of an array.

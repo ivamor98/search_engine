@@ -22,6 +22,12 @@ std::vector<std::string> ConverterJSON::GetTextDocuments()
     for (auto it = configJSON["files"].begin(); it != configJSON["files"].end(); ++it)
     {
         fConfig.open((std::string)*it);
+
+        if (!fConfig.is_open())
+        {
+            throw std::runtime_error("File is missing");
+        }
+
         while (!fConfig.eof())
             std::getline(fConfig, currentContent);
         textDocuments.push_back(currentContent);
