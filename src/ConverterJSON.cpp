@@ -2,6 +2,10 @@
 
 std::vector<std::string> ConverterJSON::GetTextDocuments()
 {
+    // test for debug
+    std::ofstream testDebug;
+    testDebug.open("testDebug.txt");
+
     std::ifstream fConfig;
     fConfig.open("config.json");
     if (!fConfig.is_open())
@@ -25,7 +29,7 @@ std::vector<std::string> ConverterJSON::GetTextDocuments()
 
         if (!fConfig.is_open())
         {
-            throw std::runtime_error("File is missing");
+            throw std::runtime_error("File " + (std::string)*it + " is missing");
         }
 
         while (!fConfig.eof())

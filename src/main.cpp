@@ -1,6 +1,7 @@
 #include <iostream>
 // #include <nlohmann/json.hpp>
 #include "ConverterJSON.h"
+#include "InvertedIndex.h"
 
 int main()
 {
@@ -37,6 +38,11 @@ int main()
     {
         std::cerr << e.what() << '\n';
     }
+
+    // test invert
+    std::vector<std::string> input_docs = {"/one&  two,  three. "};
+    InvertedIndex invertedIndex;
+    invertedIndex.UpdateDocumentBase(filesContent);
 
     return 0;
 }
