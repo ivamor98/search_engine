@@ -16,58 +16,78 @@ std::vector<std::string> splitString(std::string str)
                 str = str.substr(position + 1);
                 break;
             }
+            if (position + 1 == str.size())
+            {
+                word = str;
+                vWords.push_back(word);
+                str.clear();
+                break;
+            }
         }
     }
     return vWords;
 }
-
-void InvertedIndex::UpdateDocumentBase(std::vector<std::string> input_docs)
+void InvertedIndex::fillWords(int current_doc)
 {
-    // if (!docs.empty()) // нужна ли строка?
-    docs.clear();
-    docs = input_docs;
-    freq_dictionary.clear();
-    // test
-    for (auto oneRequest : docs)
-        std::cout << "____________\n"
-                  << oneRequest << std::endl;
-    //
     std::string tempWord;
     std::vector<Entry> tempVecEntry;
+    std::vector<std::string> vWords;
     Entry tempEntry;
-    for (size_t current_doc = 0; current_doc < docs.size(); ++current_doc)
+
+    vWords = splitString(docs[current_doc]);
+    for (auto tempWord : vWords)
     {
-        // std::vector<std::string> vWords = splitString(docs[current_doc]); для второго метода
-        while (!docs[current_doc].empty())
+        acces_frec_dict.lock();
+        auto it_freq_dictionary = freq_dictionary.find(tempWord);
+        if (it_freq_dictionary == freq_dictionary.end()) // если слова нет в словаре, заводим новый элемент
         {
-            for (size_t position = 0; position < docs[current_doc].size(); ++position)
+            tempEntry.doc_id = current_doc;
+            tempEntry.count = 1;
+            tempVecEntry.clear();
+            tempVecEntry.push_back(tempEntry);
+            freq_dictionary.insert(std::make_pair(tempWord, tempVecEntry));
+        }
+        else // если слово есть в словаре, увеличиваем счетчик слов, если в текущем документе такое слово уже были,
+             // или добавляемновый элемент в конец ветора
+        {
+
+            bool find_doc = false;
+            for (auto &it_vec_entry : it_freq_dictionary->second)
             {
-                if (isspace(docs[current_doc][position]) || ispunct(docs[current_doc][position]) || position == docs[current_doc].size() - 1)
+                if (it_vec_entry.doc_id == current_doc)
                 {
-                    tempWord = docs[current_doc].substr(0, position);
-                    if (position != 0)
-                    {
-                        auto it_freq_dictionary = freq_dictionary.find(tempWord);
-                        if (it_freq_dictionary == freq_dictionary.end())
-                        {
-                            tempEntry.doc_id = current_doc;
-                            tempEntry.count = 1;
-                            tempVecEntry.clear();
-                            tempVecEntry.push_back(tempEntry);
-                            freq_dictionary.insert(std::make_pair(tempWord, tempVecEntry)); // что-то недобавляет
-                        }
-                        else
-                        {
-                            if (it_freq_dictionary->second.back().doc_id == current_doc)
-                                ++it_freq_dictionary->second.back().count;
-                            else
-                                it_freq_dictionary->second.push_back({current_doc, 1});
-                        }
-                    }
-                    docs[current_doc] = docs[current_doc].substr(position + 1);
+
+                    ++it_vec_entry.count;
+                    find_doc = true;
                     break;
                 }
             }
+            if (!find_doc)
+            {
+                it_freq_dictionary->second.push_back({(size_t)current_doc, 1}); // проверить правильно ли приводится
+            }
         }
+        acces_frec_dict.unlock();
+    }
+}
+
+void InvertedIndex::UpdateDocumentBase(std::vector<std::string> input_docs)
+{
+    if (!docs.empty()) // нужна ли строка?
+        docs.clear();
+    docs = input_docs;
+    freq_dictionary.clear();
+    std::vector<std::thread *> threads;
+
+    for (int current_doc = 0; current_doc < docs.size(); ++current_doc)
+    {
+        std::thread *newThread = new std::thread(&InvertedIndex::fillWords, this, current_doc);
+        threads.push_back(newThread);
+    }
+    for (auto current_thead : threads)
+    {
+        current_thead->join();
+        delete current_thead;
+        current_thead = nullptr;
     }
 }

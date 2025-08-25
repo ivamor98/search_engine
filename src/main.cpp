@@ -1,10 +1,12 @@
 #include <iostream>
+#include <thread>
 // #include <nlohmann/json.hpp>
 #include "ConverterJSON.h"
 #include "InvertedIndex.h"
 
 int main()
 {
+    std::cout << "treads: " << std::thread::hardware_concurrency() << std::endl;
     ConverterJSON convertJSON;
     std::vector<std::string> filesContent;
     std::vector<std::string> newRequests;
@@ -40,7 +42,6 @@ int main()
     }
 
     // test invert
-    std::vector<std::string> input_docs = {"/one&  two,  three. "};
     InvertedIndex invertedIndex;
     invertedIndex.UpdateDocumentBase(filesContent);
 

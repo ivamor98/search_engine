@@ -5,6 +5,8 @@
 #include <map>
 #include <sstream> // check
 #include <cctype>
+#include <thread>
+#include <mutex>
 
 struct Entry
 {
@@ -25,6 +27,11 @@ class InvertedIndex
 private:
     std::vector<std::string> docs;                             // список содержимого документов
     std::map<std::string, std::vector<Entry>> freq_dictionary; // частотный словарь
+    std::mutex acces_frec_dict;
+
+    // метод добавляет слова строки в словарь по индексу в векторе docs
+    void fillWords(int current_doc);
+
 public:
     InvertedIndex() = default;
     /**
@@ -41,5 +48,6 @@ public:
 */
     std::vector<Entry> GetWordCount(const std::string &word);
 
+    // дружественная функция, разделяет строку на вектор отдельных слов
     friend std::vector<std::string> splitString(std::string str);
 };
