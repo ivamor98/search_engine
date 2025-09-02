@@ -91,3 +91,14 @@ void InvertedIndex::UpdateDocumentBase(std::vector<std::string> input_docs)
         current_thead = nullptr;
     }
 }
+
+std::vector<Entry> InvertedIndex::GetWordCount(const std::string &word)
+{
+    auto it_freq_dictionary = freq_dictionary.find(word);
+    if (it_freq_dictionary == freq_dictionary.end())
+    {
+        throw std::runtime_error("Word file is missing");
+    }
+    else
+        return it_freq_dictionary->second;
+}

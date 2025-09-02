@@ -44,6 +44,15 @@ int main()
     // test invert
     InvertedIndex invertedIndex;
     invertedIndex.UpdateDocumentBase(filesContent);
+    try
+    {
+        auto test = invertedIndex.GetWordCount("m");
+        std::cout << "m count: " << test[0].count << " in doc_id: " << test[0].doc_id << std::endl;
+    }
+    catch (const std::exception &e)
+    {
+        std::cerr << e.what() << '\n';
+    }
 
     return 0;
 }
