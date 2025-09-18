@@ -1,30 +1,20 @@
 #include "InvertedIndex.h"
 
-std::vector<std::string> splitString(std::string str)
+std::vector<std::string> splitString(std::string &str)
 {
     std::vector<std::string> vWords;
     std::string word;
-    while (!str.empty())
+    for (auto it = str.begin(); it != str.end(); ++it) // удаляет знаки препинания. меняет исходную строку
     {
-        for (size_t position = 0; position < str.size(); ++position)
-        {
-            if (isspace(str[position]) || ispunct(str[position]))
-            {
-                word = str.substr(0, position);
-                if (position != 0)
-                    vWords.push_back(word);
-                str = str.substr(position + 1);
-                break;
-            }
-            if (position + 1 == str.size())
-            {
-                word = str;
-                vWords.push_back(word);
-                str.clear();
-                break;
-            }
-        }
+        if (ispunct(*it))
+            *it = ' ';
     }
+    std::istringstream iss(str);
+    while (iss >> word)
+    {
+        vWords.push_back(word);
+    }
+
     return vWords;
 }
 void InvertedIndex::fillWords(int current_doc)
@@ -73,32 +63,26 @@ void InvertedIndex::fillWords(int current_doc)
 
 void InvertedIndex::UpdateDocumentBase(std::vector<std::string> input_docs)
 {
-    if (!docs.empty()) // нужна ли строка?
-        docs.clear();
     docs = input_docs;
     freq_dictionary.clear();
-    std::vector<std::thread *> threads;
+    std::vector<std::thread> threads;
 
     for (int current_doc = 0; current_doc < docs.size(); ++current_doc)
     {
-        std::thread *newThread = new std::thread(&InvertedIndex::fillWords, this, current_doc);
-        threads.push_back(newThread);
+        threads.emplace_back(&InvertedIndex::fillWords, this, current_doc);
     }
-    for (auto current_thead : threads)
+    for (auto &current_thead : threads)
     {
-        current_thead->join();
-        delete current_thead;
-        current_thead = nullptr;
+        current_thead.join();
     }
 }
 
-std::vector<Entry> InvertedIndex::GetWordCount(const std::string &word)
+const std::vector<Entry> &InvertedIndex::GetWordCount(const std::string &word)
 {
     auto it_freq_dictionary = freq_dictionary.find(word);
     if (it_freq_dictionary == freq_dictionary.end())
     {
-        throw std::runtime_error("Word file is missing");
+        return std::vector<Entry>();
     }
-    else
-        return it_freq_dictionary->second;
+    return it_freq_dictionary->second;
 }

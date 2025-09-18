@@ -33,8 +33,10 @@ std::vector<std::string> ConverterJSON::GetTextDocuments()
         }
 
         while (!fConfig.eof())
+        {
             std::getline(fConfig, currentContent);
-        textDocuments.push_back(currentContent);
+            textDocuments.push_back(currentContent);
+        }
         fConfig.close();
     }
 

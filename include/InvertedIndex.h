@@ -20,7 +20,7 @@ struct Entry
 };
 
 // разделяет строку на отбельные слова
-std::vector<std::string> splitString(std::string str);
+std::vector<std::string> splitString(std::string &str);
 
 class InvertedIndex
 {
@@ -46,8 +46,7 @@ public:
 * @param word слово, частоту вхождений которого необходимо определить
 * @return возвращает подготовленный список с частотой слов
 */
-    std::vector<Entry> GetWordCount(const std::string &word);
+    const std::vector<Entry> &GetWordCount(const std::string &word);
 
     // дружественная функция, разделяет строку на вектор отдельных слов
-    friend std::vector<std::string> splitString(std::string str);
 };
