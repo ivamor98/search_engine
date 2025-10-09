@@ -82,7 +82,9 @@ const std::vector<Entry> &InvertedIndex::GetWordCount(const std::string &word)
     auto it_freq_dictionary = freq_dictionary.find(word);
     if (it_freq_dictionary == freq_dictionary.end())
     {
-        return std::vector<Entry>();
+        std::vector<Entry> emptyVec = {};
+        return emptyVec;
+        // return std::vector<Entry>{};  // так не проходит тест TestInvertedIndexMissingWord
     }
     return it_freq_dictionary->second;
 }
