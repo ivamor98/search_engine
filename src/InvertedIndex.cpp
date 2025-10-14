@@ -1,14 +1,19 @@
 #include "InvertedIndex.h"
 
-std::vector<std::string> splitString(std::string &str)
+void deletePunct(std::string &str)
 {
-    std::vector<std::string> vWords;
-    std::string word;
     for (auto it = str.begin(); it != str.end(); ++it) // удаляет знаки препинания. меняет исходную строку
     {
         if (ispunct(*it))
             *it = ' ';
     }
+}
+
+std::vector<std::string> splitString(std::string &str)
+{
+    std::vector<std::string> vWords;
+    std::string word;
+    deletePunct(str);
     std::istringstream iss(str);
     while (iss >> word)
     {
@@ -87,4 +92,20 @@ const std::vector<Entry> &InvertedIndex::GetWordCount(const std::string &word)
         // return std::vector<Entry>{};  // так не проходит тест TestInvertedIndexMissingWord
     }
     return it_freq_dictionary->second;
+}
+
+InvertedIndex &InvertedIndex::operator=(InvertedIndex &other)
+{
+    if (&other == this)
+        return *this;
+    docs = other.docs;
+    freq_dictionary = other.freq_dictionary;
+}
+
+InvertedIndex &InvertedIndex::operator()(InvertedIndex &other)
+{
+    if (&other == this)
+        return *this;
+    docs = other.docs;
+    freq_dictionary = other.freq_dictionary;
 }

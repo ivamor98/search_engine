@@ -8,7 +8,8 @@ add_executable(search_engine_test
                             ${HEADERS}/ConverterJSON.h 
                             ${HEADERS}/InvertedIndex.h 
                             ${HEADERS}/SearchServer.h
-                            InvertedIndexTests.cpp 
+                            InvertedIndexTests.cpp
+                            SearchServerTest.cpp 
                             )
 
 include(FetchContent)

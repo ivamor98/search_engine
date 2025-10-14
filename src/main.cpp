@@ -3,6 +3,7 @@
 // #include <nlohmann/json.hpp>
 #include "ConverterJSON.h"
 #include "InvertedIndex.h"
+#include "SearchServer.h"
 
 int main()
 {
@@ -53,6 +54,11 @@ int main()
     {
         std::cerr << e.what() << '\n';
     }
+
+    // test Seatch Server
+    SearchServer searchServer(invertedIndex);
+    // std::unordered_set<std::string> testUniqSet = getUniqSet("  one two thee4 one ,,,566");
+    auto it = searchServer.search({{"m too a y"}, {"yes"}}, convertJSON.GetResponsesLimit());
 
     return 0;
 }

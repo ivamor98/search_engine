@@ -19,7 +19,9 @@ struct Entry
     }
 };
 
-// разделяет строку на отбельные слова
+// удаляет знаки препинания из строки
+void deletePunct(std::string &str);
+// разделяет строку на отдельные слова
 std::vector<std::string> splitString(std::string &str);
 
 class InvertedIndex
@@ -48,5 +50,6 @@ public:
 */
     const std::vector<Entry> &GetWordCount(const std::string &word);
 
-    // дружественная функция, разделяет строку на вектор отдельных слов
+    InvertedIndex &operator=(InvertedIndex &other);
+    InvertedIndex &operator()(InvertedIndex &other);
 };
