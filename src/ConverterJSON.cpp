@@ -2,10 +2,6 @@
 
 std::vector<std::string> ConverterJSON::GetTextDocuments()
 {
-    // test for debug
-    std::ofstream testDebug;
-    testDebug.open("testDebug.txt");
-
     std::ifstream fConfig;
     fConfig.open("config.json");
     if (!fConfig.is_open())
@@ -39,7 +35,7 @@ std::vector<std::string> ConverterJSON::GetTextDocuments()
         }
         fConfig.close();
     }
-
+    std::cout << configJSON["config"]["name"] << " starts working..." << std::endl;
     return textDocuments;
 };
 

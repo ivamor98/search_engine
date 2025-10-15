@@ -7,7 +7,6 @@
 
 int main()
 {
-    std::cout << "treads: " << std::thread::hardware_concurrency() << std::endl;
     ConverterJSON convertJSON;
     std::vector<std::string> filesContent;
     std::vector<std::string> newRequests;
@@ -48,7 +47,6 @@ int main()
     try
     {
         auto test = invertedIndex.GetWordCount("m");
-        std::cout << "m count: " << test[0].count << " in doc_id: " << test[0].doc_id << std::endl;
     }
     catch (const std::exception &e)
     {
@@ -58,7 +56,7 @@ int main()
     // test Seatch Server
     SearchServer searchServer(invertedIndex);
     // std::unordered_set<std::string> testUniqSet = getUniqSet("  one two thee4 one ,,,566");
-    auto it = searchServer.search({{"m too a y"}, {"yes"}}, convertJSON.GetResponsesLimit());
+    auto it = searchServer.search(convertJSON.GetRequests(), convertJSON.GetResponsesLimit());
 
     return 0;
 }
