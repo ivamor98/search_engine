@@ -1,8 +1,0 @@
-{
-    "requests": [
-        "vector",
-        "container",
-        "size arrays",
-        "trees"
-    ]
-}
