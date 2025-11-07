@@ -15,6 +15,7 @@ add_executable(search_engine_test
 include(FetchContent)
 
 FetchContent_Declare(json GIT_REPOSITORY https://github.com/nlohmann/json/ GIT TAG v3.11.3)
+
 FetchContent_MakeAvailable(json)
 target_link_libraries(search_engine_test PUBLIC nlohmann_json::nlohmann_json)
 

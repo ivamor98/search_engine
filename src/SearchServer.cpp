@@ -36,13 +36,13 @@ std::vector<std::vector<RelativeIndex>> SearchServer::search(const std::vector<s
     std::vector<RelativeIndex> oneQueryResult;
     int absoluteRelevance = 0;
     float maxAbsoluteRelevance = 0;
-    for (auto str : queries_input) // проходимся по списку запросов
+    for (const auto &str : queries_input) // проходимся по списку запросов
     {
         uniqWordsQuery = getUniqSet(str);
-        for (auto word : uniqWordsQuery) // проходимся по списку слов в запросе
+        for (const auto &word : uniqWordsQuery) // проходимся по списку слов в запросе
         {
             auto WordVecEntry = _index.GetWordCount(word);
-            for (auto wordEntry : WordVecEntry) // проходимся по документам, где есть это слово
+            for (const auto &wordEntry : WordVecEntry) // проходимся по документам, где есть это слово
             {
                 if (oneQueryResult.empty())
                 {
